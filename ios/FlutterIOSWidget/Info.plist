@@ -4,16 +4,22 @@
 <dict>
 	<key>NSExtension</key>
 	<dict>
-	<key>NSExtensionPointIdentifier</key>
-	<string>com.apple.widgetkit-extension</string>
-	<key>NSExtensionAttributes</key>
-	<dict>
-		<key>WidgetFamily</key>
+		<key>NSExtensionPointIdentifier</key>
+		<string>com.apple.widgetkit-extension</string>
+		<key>NSExtensionAttributes</key>
+		<dict>
+			<key>WidgetFamily</key>
+			<array>
+			<string>systemSmall</string>
+			<string>systemMedium</string>
+			</array>
+		</dict>
+		<key>UIBackgroundModes</key>
 		<array>
-		<string>systemSmall</string>
-		<string>systemMedium</string>
+			<string>widget-extension</string>
 		</array>
-	</dict>
+		<key>WidgetBackgroundColor</key>
+		<string>clearColor</string>
 	</dict>
 </dict>
 </plist>

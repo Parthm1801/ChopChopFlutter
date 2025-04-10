@@ -3,11 +3,11 @@ import SwiftUI
 
 struct Provider: TimelineProvider {
     func placeholder(in context: Context) -> FlutterEntry {
-        FlutterEntry(date: Date(), widgetData: WidgetData(text: "Flutter iOS widget!"))
+        FlutterEntry(date: Date(), widgetData: WidgetData(text: "ChopChop Pardner!"))
     }
 
     func getSnapshot(in context: Context, completion: @escaping (FlutterEntry) -> ()) {
-        let entry = FlutterEntry(date: Date(), widgetData: WidgetData(text: "Flutter iOS widget!"))
+        let entry = FlutterEntry(date: Date(), widgetData: WidgetData(text: "ChopChop Pardner!"))
         completion(entry)
     }
 
@@ -44,28 +44,77 @@ struct FlutterEntry: TimelineEntry {
     let widgetData: WidgetData?
 }
 
+struct GradientText: View {
+    let text: String
+
+    var body: some View {
+        LinearGradient(
+            colors: [Color(red: 138/255, green: 79/255, blue: 255/255), Color(red: 255/255, green: 143/255, blue: 113/255)],
+            startPoint: .leading,
+            endPoint: .trailing
+        )
+        .mask(
+            Text(text)
+                // .multilineTextAlignment(.center)
+                .font(.system(size: 14, weight: .bold, design: .default))
+                .frame(maxWidth: .infinity, maxHeight:.infinity)
+                // .lineLimit(3)
+                // .padding(.horizontal)
+        )
+    }
+}
+
 struct FlutterIOSWidgetEntryView: View {
     var entry: Provider.Entry
 
     var body: some View {
-        Group {
-            if #available(iOS 17.0, *) {
-                ZStack {
-                    Text(entry.widgetData?.text ?? "Tap to set message.")
-                        .padding()
+        GeometryReader { geo in
+            ZStack(alignment: .bottomTrailing) {
+                // Full size container
+                VStack {
+                    Spacer(minLength: 0)
+
+                    GradientText(text: entry.widgetData?.text ?? "Tap to set message.")
+                        .font(.system(size: 20, weight: .bold))
+                        .foregroundColor(.black)
+                        // .multilineTextAlignment(.center)
+                        // .lineLimit(4)
+                        .fixedSize(horizontal: false, vertical: false)
+                        .layoutPriority(1)
+                        // .minimumScaleFactor(0.5)s
+                        // .padding(.horizontal, 12)
+
+                    Spacer(minLength: 0)
                 }
-                .containerBackground(for: .widget) {
-                    Color.clear
-                }
-            } else {
-                ZStack {
-                    Text(entry.widgetData?.text ?? "Tap to set message.")
-                        .padding()
+                .frame(width: geo.size.width, height: geo.size.height)
+
+                // 🔄 Refresh Button
+                Link(destination: URL(string: "chopchopai://refresh")!) {
+                    ZStack {
+                        Circle()
+                            .fill(
+                                LinearGradient(
+                                    colors: [Color(red: 138/255, green: 79/255, blue: 255/255),
+                                             Color(red: 255/255, green: 143/255, blue: 113/255)],
+                                    startPoint: .topLeading,
+                                    endPoint: .bottomTrailing
+                                )
+                            )
+                            .frame(width: 16, height: 15)
+
+                        Image(systemName: "arrow.clockwise")
+                            .font(.system(size: 8, weight: .bold))
+                            .foregroundColor(.white)
+                    }
+                    .padding(8)
                 }
             }
         }
     }
 }
+
+
+
 
 struct FlutterIOSWidget: Widget {
     let kind: String = "FlutterIOSWidget"
@@ -74,7 +123,7 @@ struct FlutterIOSWidget: Widget {
         StaticConfiguration(kind: kind, provider: Provider()) { entry in
             FlutterIOSWidgetEntryView(entry: entry)
         }
-        .configurationDisplayName("Flutter iOS Widget")
-        .description("This is an example Flutter iOS widget.")
+        .configurationDisplayName("ChopChop Pardner!")
+        .description("Tap refresh to stay motivated!")
     }
 }
